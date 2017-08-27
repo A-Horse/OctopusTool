@@ -68,6 +68,7 @@ input[type=range]::-webkit-slider-thumb {
   border-radius: 50%;
   background: #5fb084;
   margin-top: -6px;
+  cursor: pointer;
 }
 
 input[type=range]:focus {

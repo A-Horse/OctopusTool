@@ -1,7 +1,8 @@
 <template>
   <section class="container">
-    <div class="heading">
-      Low Poly
+    <div class="heading" v-bind:class="{ 'init': !img }">
+      <h2>Low Poly</h2>
+      <img alt="" src="~static/images/octopus.png"/>
     </div>
     <div>
       <label class="upload">
@@ -45,23 +46,26 @@ export default {
       random: 100,
       img: null,
       running: false,
-      worker: null
+      worker: null,
+      fileName: 'low-poly'
     }
   },
   methods: {
     download () {
       const link = this.$el.querySelector('.download-link')
       link.href = this.$el.querySelector('canvas').toDataURL()
-      link.download = '_lowpolyify'
+      link.download = 'lp_' + this.fileName
     },
     onChange (event) {
       const input = event.target
       if (!input.files.length) return
       var file = input.files[0]
+      this.fileName = file.name
       if (!/\/(?:jpeg|png)/i.test(file.type)) {
         alert('图片需为JPG或者PNG格式')
         return
       }
+
       const self = this
       var reader = new FileReader()
       reader.onload = function () {
@@ -133,11 +137,29 @@ export default {
 }
 
 .heading {
+  overflow: hidden;
   padding: 20px 0;
   background-color: #5fb084;
   color: white;
   font-size: 3rem;
   font-weight: 900;
+  position: relative;
+}
+
+.heading.init {
+  height: 380px;
+}
+
+.heading h2 {
+  margin-left: -20rem;
+}
+
+.heading img {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  opacity: 0.5;
 }
 
 label.upload {
