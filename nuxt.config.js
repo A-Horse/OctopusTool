@@ -17,18 +17,19 @@ module.exports = {
   ** Customize the progress-bar color
   */
   loading: { color: '#3B8070' },
-  /*
-  ** Build configuration
-  */
-  plugins: [
-    // ...
 
+  plugins: [
   ],
   build: {
     /*
     ** Run ESLINT on save
     */
     extend (config, ctx) {
+      config.module.rules.push({
+        test: /worker.js$/,
+        loader: 'worker-loader',
+        exclude: /(node_modules)/
+      })
       if (ctx.dev && ctx.isClient) {
         config.module.rules.push({
           enforce: 'pre',
@@ -39,5 +40,11 @@ module.exports = {
       }
     },
     vender: ['axios']
+  },
+  generate: {
+    routes: [
+      '/',
+      '/low-poly'
+    ]
   }
 }

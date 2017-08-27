@@ -31,9 +31,7 @@
 </template>
 
 <script>
-import Delaunay from 'delaunay'
-import { sobel } from '../../lib/sobel'
-import MyWorker from '../../xx.worker.js'
+import LowPolyWorker from '../../worker/low-poly.worker.js'
 
 export default {
   components: {
@@ -43,19 +41,9 @@ export default {
       jxd: 50,
       random: 100,
       img: null,
-      running: false
+      running: false,
+      worker: null
     }
-  },
-  mounted () {
-    console.log('1')
-    let worker = new MyWorker()
-    console.log('2')
-    worker.onmessage = (event) => {
-      console.log(event)
-    }
-    worker.addEventListener('message', function (event) {
-      console.log(event, 'hihi')
-    })
   },
   methods: {
     download () {
@@ -88,61 +76,38 @@ export default {
       if (!this.img) {
         return
       }
+      if (this.running) {
+        this.worker.terminate()
+      }
+
       this.running = true
       const img = this.img
       const jxdvalue = this.jxd
       const canvas = this.$el.querySelector('canvas')
       const ctx = canvas.getContext('2d')
-      var particles = []
+
       canvas.width = img.width
       canvas.height = img.height * canvas.width / img.width
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 
+      this.worker = new LowPolyWorker()
+
       setTimeout(() => {
         var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        //          收集色值大于40的边缘像素点
-        var collectors = []
 
-        sobel(imgData, function (value, x, y) {
-          if (value > 40) {
-            collectors.push([x, y])
-          }
+        this.worker.postMessage({
+          imgData: imgData,
+          width: canvas.width,
+          height: canvas.height,
+          jxdvalue
         })
 
-        //          添加一些随机点
-        for (var i = 0; i < this.random; i++) {
-          particles.push([Math.random() * canvas.width, Math.random() * canvas.height])
-        }
-        //          添加随机边缘点，数量为边缘点数量除于50
-        const length = ~~(collectors.length / jxdvalue)
-
-        let random
-        for (var l = 0; l < length; l++) {
-          random = (Math.random() * collectors.length) << 0
-          particles.push(collectors[random])
-          collectors.splice(random, 1)
-        }
-        //          添加四顶点坐标
-        particles.push([0, 0], [0, canvas.height], [canvas.width, 0], [canvas.width, canvas.height])
-        //          使用delaunay三角化获取三角坐标
-        let triangles = Delaunay.triangulate(particles)
-        let x1, x2, x3, y1, y2, y3, cx, cy
-        for (let i = 0; i < triangles.length; i += 3) {
-          x1 = particles[triangles[i]][0]
-          x2 = particles[triangles[i + 1]][0]
-          x3 = particles[triangles[i + 2]][0]
-          y1 = particles[triangles[i]][1]
-          y2 = particles[triangles[i + 1]][1]
-          y3 = particles[triangles[i + 2]][1]
-          //              获取三角形中心点坐标
-          cx = ~~((x1 + x2 + x3) / 3)
-          cy = ~~((y1 + y2 + y3) / 3)
-          //              获取中心点坐标的颜色值
-          var index = (cy * imgData.width + cx) * 4
-          var colorr = imgData.data[index]
-          var colorg = imgData.data[index + 1]
-          var colorb = imgData.data[index + 2]
-          //              绘制三角形
+        this.worker.addEventListener('message', ({ data }) => {
+          if (data.finish) {
+            this.running = false
+            return
+          }
+          const { x1, x2, x3, y1, y2, y3, colorr, colorg, colorb } = data
           ctx.save()
           ctx.beginPath()
           ctx.moveTo(x1, y1)
@@ -152,8 +117,7 @@ export default {
           ctx.fillStyle = 'rgba(' + colorr + ',' + colorg + ',' + colorb + ',1)'
           ctx.fill()
           ctx.restore()
-        }
-        this.running = false
+        })
       }, 50)
     }
   }
