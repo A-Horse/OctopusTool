@@ -1,31 +1,34 @@
 <template>
   <section class="container">
+    <div class="heading">
+      Low Poly
+    </div>
     <div>
-      <div>
-        <a id="upload">上传图片</a>
+      <label class="upload">
+        upload image
         <input type="file" id="files" v-on:change="onChange" accept="image/*"/>
-      </div>
-      <div v-if="!!img">
-        <div>
-          <label>accuracy</label>
-          <span>{{jxd}}</span>
-          <input type="range" min="2" v-model="jxd" v-on:change="parse">
-        </div>
-
-        <div>
-          <label>random point</label>
-          <span>{{random}}</span>
-          <input type="range" max="1000" v-model="random" v-on:change="parse">
-        </div>
+      </label>
+    </div>
+    <div v-if="!!img">
+      <div class="slider">
+        <label>accuracy</label>
+        <span>{{jxd}}</span>
+        <input type="range" max="100" v-model="jxd" v-on:change="parse">
       </div>
 
-      <div class="canvas-container" v-bind:class="{ 'running': running }">
-        <canvas></canvas>
+      <div class="slider">
+        <label>random point</label>
+        <span>{{random}}</span>
+        <input type="range" max="1000" v-model="random" v-on:change="parse">
       </div>
+    </div>
 
-      <div>
-        <a class="download-link" v-on:click="download">Download</a>
-      </div>
+    <div class="canvas-container" v-bind:class="{ 'running': running }">
+      <canvas></canvas>
+    </div>
+
+    <div v-if="!!img">
+      <a class="download-link" v-on:click="download">Download</a>
     </div>
   </section>
 </template>
@@ -64,10 +67,11 @@ export default {
       reader.onload = function () {
         var img = new Image()
         img.src = this.result
-
         img.onload = function () {
           self.img = this
-          self.parse()
+          setTimeout(() => {
+            self.parse()
+          })
         }
       }
       reader.readAsDataURL(file)
@@ -79,7 +83,6 @@ export default {
       if (this.running) {
         this.worker.terminate()
       }
-
       this.running = true
       const img = this.img
       const jxdvalue = this.jxd
@@ -88,20 +91,17 @@ export default {
 
       canvas.width = img.width
       canvas.height = img.height * canvas.width / img.width
+
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-
       this.worker = new LowPolyWorker()
-
       setTimeout(() => {
         var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-
         this.worker.postMessage({
           imgData: imgData,
           width: canvas.width,
           height: canvas.height,
           jxdvalue
         })
-
         this.worker.addEventListener('message', ({ data }) => {
           if (data.finish) {
             this.running = false
@@ -126,15 +126,73 @@ export default {
 
 <style scoped>
 .container {
-  min-height: 100vh;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  padding: 0 20px 30px;
+}
+
+.heading {
+  padding: 20px 0;
+  background-color: #5fb084;
+  color: white;
+  font-size: 3rem;
+  font-weight: 900;
+}
+
+label.upload {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: inline-block;
+  position: relative;
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 3px 5px 4px;
+  cursor: pointer;
+  transition: all 100ms;
+  background-color: white;
+}
+
+label.upload * {
+  cursor: pointer;
+}
+
+label.upload:hover {
+  background-color: #5fb084;
+  border: 1px solid #5fb084;
+  color: white;
+}
+
+label.upload input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.slider {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
 }
 
 .canvas-container {
+  width: 100%;
+  overflow: scroll;
+  margin-top: 20px;
   position: relative;
+  box-sizing: border-box;
+}
+
+canvas {
+  display: block;
+  margin: 0 auto;
+  border-radius: 2px;
 }
 
 .canvas-container.running {
@@ -150,11 +208,15 @@ export default {
   right: 0;
   bottom: 0;
   top: 0;
-  background-color: black;
   opacity: 0.3;
 }
 
 .index-link {
 
+}
+
+.download-link {
+  margin-top: 10px;
+  display: inline-block;
 }
 </style>

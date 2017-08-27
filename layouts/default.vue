@@ -1,5 +1,11 @@
 <template>
   <div>
+    <nav class="nav">
+      <ul>
+        <li><nuxt-link to="/">Home</nuxt-link></li>
+        <li><nuxt-link to="/low-poly">Low poly</nuxt-link></li>
+      </ul>
+    </nav>
     <nuxt/>
   </div>
 </template>
@@ -16,37 +22,59 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
-  box-sizing: border-box;
+* {
   margin: 0;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
+ul {
+  list-style: none;
+}
+
+.nav {
+  padding: 5px 0px;
+}
+
+.nav ul {
+  display: flex;
+}
+
+.nav ul li {
+  padding: 0 10px;
+  font-weight: 700;
+}
+
+a {
   text-decoration: none;
-  padding: 10px 30px;
+  color: #2a97b0;
 }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
+input[type=range]{
+      -webkit-appearance: none;
 }
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
+input[type=range]::-webkit-slider-runnable-track {
+  width: 300px;
+  height: 4px;
+  background: #ddd;
+  border: none;
+  border-radius: 3px;
 }
 
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #5fb084;
+  margin-top: -6px;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #ccc;
 }
 </style>

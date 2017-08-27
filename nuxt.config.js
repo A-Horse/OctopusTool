@@ -1,7 +1,4 @@
 module.exports = {
-  /*
-  ** Headers of the page
-  */
   head: {
     title: 'site-tool',
     meta: [
@@ -13,17 +10,12 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#3B8070' },
+  css: [
 
-  plugins: [
   ],
+  loading: { color: '#3B8070' },
+  plugins: ['~plugins/museui.js'],
   build: {
-    /*
-    ** Run ESLINT on save
-    */
     extend (config, ctx) {
       config.module.rules.push({
         test: /worker.js$/,
