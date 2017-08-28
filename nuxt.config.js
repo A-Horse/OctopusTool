@@ -14,7 +14,7 @@ module.exports = {
 
   ],
   loading: { color: '#3B8070' },
-  plugins: [],
+  plugins: [{ src: '~plugins/ga.js', ssr: false }],
   build: {
     extend (config, ctx) {
       config.module.rules.push({
