@@ -14,7 +14,7 @@
       <div class="slider">
         <label>accuracy</label>
         <span>{{jxd}}</span>
-        <input type="range" max="100" v-model="jxd" v-on:change="parse">
+        <input type="range" min="2" max="100" v-model="jxd" v-on:change="parse">
       </div>
 
       <div class="slider">
