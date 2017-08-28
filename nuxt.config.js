@@ -14,7 +14,7 @@ module.exports = {
 
   ],
   loading: { color: '#3B8070' },
-  plugins: ['~plugins/museui.js'],
+  plugins: [],
   build: {
     extend (config, ctx) {
       config.module.rules.push({
