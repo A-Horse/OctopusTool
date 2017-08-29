@@ -5,6 +5,10 @@
       <img alt="" src="~static/images/octopus.png"/>
     </div>
     <div>
+      <h3>Low Poly Generator</h3>
+      <p>Low Poly Generator an exciting method that gives web designers the scalability, flexibility, and performance to generate low poly image. </p>
+    </div>
+    <div>
       <label class="upload">
         upload image
         <input type="file" id="files" v-on:change="onChange" accept="image/*"/>
@@ -38,6 +42,15 @@
 import LowPolyWorker from '../../worker/low-poly.worker.js'
 
 export default {
+  head () {
+    return {
+      title: 'Generate low poly image',
+      meta: [
+        { hid: 'description', name: 'description', content: 'Generate low poly image with a click!' },
+        { hid: 'og:title', name: 'og:title', content: 'Design Tool - Low poly image generation.' }
+      ]
+    }
+  },
   components: {
   },
   data () {
