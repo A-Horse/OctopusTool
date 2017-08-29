@@ -6,7 +6,19 @@
     </div>
     <div>
       <h3>Low Poly Generator</h3>
-      <p>Low Poly Generator an exciting method that gives web designers the scalability, flexibility, and performance to generate low poly image. </p>
+      <p>Low Poly Generator an exciting method that gives web designers the scalability, flexibility, and performance to generate low poly image. Only a few simple steps to create a work of art. </p>
+      <div>
+        <h3>How I works:</h3>
+        <ul>
+          <li>Upload image (only png or jpg)</li>
+          <li>I will generate low poly image immediately.</li>
+          <li>You can adjust accuracy and random point slider to control the generated low poly effect.</li>
+        </ul>
+      </div>
+
+      <div>
+        <small>Sorry guys, it works only with browsers with Canvas API support.</small>
+      </div>
     </div>
     <div>
       <label class="upload">
