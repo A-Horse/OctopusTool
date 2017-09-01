@@ -1,5 +1,6 @@
 <template>
   <section class="container">
+    <h1>Octopus Tool</h1>
     <div>
       <nuxt-link class="index-link" v-bind:to="'/low-poly'">LOW POLY</nuxt-link>
     </div>
