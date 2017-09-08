@@ -8,21 +8,21 @@
 </template>
 
 <script>
-export default {
-  head () {
-    return {
-      title: 'Developer and Designer Tool - Octopus Tool',
-      meta: [
-        { hid: 'description', name: 'description', content: 'Generate low poly image with a click!' },
-        { hid: 'og:title', name: 'og:title', content: 'Design Tool - Low poly image generation.' },
-        { hid: 'og:type', name: 'og:type', content: 'website' }
-      ]
-    }
-  },
-  components: {
+  export default {
+    head () {
+      return {
+        title: 'Tool Octopuese - Online | Developer and Designer Tool - Octopus Tool',
+        meta: [
+          { hid: 'description', name: 'description', content: 'Generate low poly image with a click!' },
+          { hid: 'og:title', name: 'og:title', content: 'Design Tool - Low poly image generation.' },
+          { hid: 'og:type', name: 'og:type', content: 'website' }
+        ]
+      }
+    },
+    components: {
 
+    }
   }
-}
 </script>
 
 <style scoped>
